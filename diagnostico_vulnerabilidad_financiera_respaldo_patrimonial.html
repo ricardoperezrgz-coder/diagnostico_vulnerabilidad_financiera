@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico de Vulnerabilidad Financiera | Respaldo Patrimonial</title>
+<meta name="description" content="Diagnóstico gratuito para identificar las áreas de mayor vulnerabilidad financiera ante un siniestro.">
+<style>
+:root{
+  --red:#c62828;
+  --red-dark:#941f1f;
+  --navy:#17253a;
+  --gold:#c89b3c;
+  --bg:#f5f7fa;
+  --white:#fff;
+  --text:#263238;
+  --muted:#667085;
+  --green:#2e7d32;
+  --yellow:#b7791f;
+  --orange:#c05621;
+  --shadow:0 10px 30px rgba(23,37,58,.10);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif;line-height:1.5}
+.container{width:min(960px,92%);margin:auto}
+header{background:linear-gradient(135deg,var(--navy),#243b5a);color:#fff;padding:42px 0 34px}
+.brand{font-weight:800;letter-spacing:.3px;font-size:21px}
+.hero{padding:20px 0 10px}
+.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.08;margin:10px 0 14px}
+.hero p{font-size:18px;max-width:720px;color:#e8edf5;margin:0}
+.badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:7px 12px;border-radius:999px;font-size:13px}
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;margin:24px 0}
+.progress-wrap{margin-bottom:24px}
+.progress-top{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-bottom:8px}
+.progress{height:9px;background:#e7ebf0;border-radius:99px;overflow:hidden}
+.progress-bar{height:100%;width:0;background:var(--red);transition:width .25s}
+label{display:block;font-weight:700;margin-bottom:9px;color:#17253a}
+input,select{width:100%;padding:13px 14px;border:1px solid #cbd3df;border-radius:10px;font-size:16px;background:#fff;color:#263238;-webkit-text-fill-color:#263238;caret-color:#c62828}input::placeholder{color:#667085;opacity:1;-webkit-text-fill-color:#667085}select{color:#263238;-webkit-text-fill-color:#263238}select option{color:#263238;background:#fff}input:focus,select:focus{outline:none;border-color:#c62828;box-shadow:0 0 0 3px rgba(198,40,40,.12)}
+.question h2{font-size:24px;line-height:1.25;margin-top:0}
+.option{display:flex;gap:12px;align-items:flex-start;border:1px solid #dfe4eb;padding:14px;border-radius:12px;margin:10px 0;cursor:pointer;transition:.15s}
+.option:hover{border-color:#b9c2ce;background:#fafbfc}
+.option input{width:auto;margin-top:4px}
+.option strong{display:block}
+.option small{display:block;color:var(--muted);font-weight:400;margin-top:2px}
+.buttons{display:flex;gap:12px;justify-content:space-between;margin-top:24px}
+button{border:0;border-radius:11px;padding:13px 20px;font-size:16px;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-dark)}
+.btn-secondary{background:#e9edf2;color:var(--navy)}
+.hidden{display:none!important}
+.error{color:#b42318;background:#fff2f0;border:1px solid #ffd2cc;padding:10px 12px;border-radius:9px;margin-top:12px}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:680px){.intro-grid{grid-template-columns:1fr}.card{padding:21px}.buttons{flex-direction:column}.buttons button{width:100%}}
+.results-header{text-align:center}
+.results-header h2{font-size:34px;margin:8px 0}
+.result-main{border-left:6px solid var(--red);background:#fff7f6;padding:18px;border-radius:12px}
+.result-main h3{margin:0 0 7px;font-size:25px}
+.level{display:inline-block;border-radius:999px;padding:5px 10px;font-size:13px;font-weight:800;margin-bottom:8px}
+.level-alto{background:#fde8e8;color:#a61b1b}.level-medio{background:#fff4d6;color:#8a5a00}.level-bajo{background:#e8f5e9;color:#246b28}
+.scores{display:grid;gap:12px;margin-top:18px}
+.score-row{display:grid;grid-template-columns:180px 1fr 65px;gap:12px;align-items:center}
+@media(max-width:600px){.score-row{grid-template-columns:1fr 70px}.score-row .meter{grid-column:1/-1;grid-row:2}}
+.meter{height:11px;background:#e8ecf1;border-radius:99px;overflow:hidden}
+.meter span{display:block;height:100%;background:var(--red)}
+.recommendation{background:#f7f8fa;border-radius:12px;padding:17px;margin-top:18px}
+.cta{background:var(--navy);color:#fff;text-align:center}
+.cta h3{font-size:25px;margin-top:0}
+.cta p{color:#dfe7f1}
+.cta a{display:inline-block;background:var(--red);color:#fff;text-decoration:none;padding:14px 20px;border-radius:10px;font-weight:800}
+.disclaimer{font-size:12px;color:var(--muted);margin-top:18px}
+footer{padding:28px 0 45px;text-align:center;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="brand">RESPALDO PATRIMONIAL</div>
+    <div class="hero">
+      <span class="badge">Diagnóstico gratuito · 25 preguntas</span>
+      <h1>¿Qué podría poner en riesgo tu patrimonio ante un siniestro?</h1>
+      <p>Responde estas preguntas y descubre cuál de tus áreas financieras presenta mayor vulnerabilidad: protección familiar, salud, retiro, educación de tus hijos o patrimonio.</p>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+<section id="intro" class="card">
+  <h2>Antes de comenzar</h2>
+  <p>Este diagnóstico está diseñado para ayudarte a detectar posibles brechas de protección. No necesitas conocer términos técnicos ni contratar ningún producto para realizarlo.</p>
+  <div class="intro-grid">
+    <div>
+      <label for="name">Nombre</label>
+      <input id="name" type="text" placeholder="Tu nombre">
+    </div>
+    <div>
+      <label for="age">Edad</label>
+      <input id="age" type="number" min="18" max="100" placeholder="Ej. 38">
+    </div>
+  </div>
+  <div style="margin-top:16px">
+    <label for="income">Ingreso mensual aproximado</label>
+    <select id="income">
+      <option value="">Selecciona una opción</option>
+      <option value="10000">$10,000 o menos</option>
+      <option value="15000">$10,001 a $20,000</option>
+      <option value="30000">$20,001 a $40,000</option>
+      <option value="55000">$40,001 a $70,000</option>
+      <option value="85000">Más de $70,000</option>
+      <option value="0">Prefiero no responder</option>
+    </select>
+  </div>
+  <div class="intro-grid" style="margin-top:16px">
+    <div>
+      <label for="dependents">Personas que dependen económicamente de ti</label>
+      <input id="dependents" type="number" min="0" max="15" value="0">
+    </div>
+    <div>
+      <label for="savings">Ahorro líquido disponible aproximado</label>
+      <select id="savings">
+        <option value="0">Menos de $50,000</option>
+        <option value="50000">$50,000–$149,999</option>
+        <option value="150000">$150,000–$299,999</option>
+        <option value="300000">$300,000–$499,999</option>
+        <option value="500000">$500,000 o más</option>
+      </select>
+    </div>
+  </div>
+  <div class="intro-grid" style="margin-top:16px">
+    <div>
+      <label for="lifeCoverage">Seguro de vida vigente aproximado</label>
+      <select id="lifeCoverage">
+        <option value="0">No tengo / no sé</option>
+        <option value="250000">$250,000</option>
+        <option value="500000">$500,000</option>
+        <option value="1000000">$1,000,000</option>
+        <option value="2500000">$2,500,000</option>
+        <option value="5000000">$5,000,000 o más</option>
+      </select>
+    </div>
+    <div>
+      <label for="retirementSavings">Ahorro/inversión actual para retiro</label>
+      <select id="retirementSavings">
+        <option value="0">No tengo / no sé</option>
+        <option value="100000">$100,000</option>
+        <option value="300000">$300,000</option>
+        <option value="500000">$500,000</option>
+        <option value="1000000">$1,000,000</option>
+        <option value="2500000">$2,500,000 o más</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn-primary" style="margin-top:20px" onclick="startTest()">Comenzar diagnóstico</button>
+  <div id="introError" class="error hidden">Por favor indica tu nombre y edad para comenzar.</div>
+</section>
+
+<section id="quiz" class="card hidden">
+  <div class="progress-wrap">
+    <div class="progress-top"><span id="counter">Pregunta 1 de 25</span><span id="pct">4%</span></div>
+    <div class="progress"><div id="bar" class="progress-bar"></div></div>
+  </div>
+  <div id="questionBox" class="question"></div>
+  <div class="buttons">
+    <button class="btn-secondary" id="prevBtn" onclick="prevQuestion()">Anterior</button>
+    <button class="btn-primary" id="nextBtn" onclick="nextQuestion()">Siguiente</button>
+  </div>
+  <div id="qError" class="error hidden">Selecciona una respuesta para continuar.</div>
+</section>
+
+<section id="results" class="hidden">
+  <div class="card results-header">
+    <span class="badge" style="background:var(--navy);color:#fff">Resultado de tu diagnóstico</span>
+    <h2 id="resultGreeting"></h2>
+    <p>Tu puntuación identifica dónde existe mayor exposición financiera relativa dentro de las áreas evaluadas.</p>
+  </div>
+  <div class="card">
+    <div class="result-main">
+      <span id="mainLevel" class="level"></span>
+      <h3 id="mainTitle"></h3>
+      <p id="mainText"></p>
+    </div>
+    <div class="scores" id="scoreList"></div>
+    <div class="recommendation">
+      <strong>¿Qué significa?</strong>
+      <p id="recommendationText" style="margin-bottom:0"></p>
+    </div>
+    <div id="gapCard" class="recommendation" style="margin-top:14px;background:#fffaf0;border:1px solid #f1dfb2">
+      <strong>💰 Brecha económica estimada</strong>
+      <div id="gapAmount" style="font-size:30px;font-weight:900;color:var(--navy);margin:6px 0"></div>
+      <p id="gapText" style="margin-bottom:0"></p>
+    </div>
+  </div>
+  <div class="card cta">
+    <h3>Convierte este diagnóstico en un plan de acción</h3>
+    <p>Si quieres, podemos revisar contigo qué cantidad de protección o ahorro tendría sentido de acuerdo con tu situación.</p>
+    <a id="whatsapp" target="_blank" rel="noopener">Solicitar diagnóstico personalizado por WhatsApp</a>
+    <div class="disclaimer">La asesoría personalizada considera tus circunstancias, objetivos, presupuesto y las condiciones de los productos disponibles.</div>
+  </div>
+  <div class="card">
+    <h3>Importante</h3>
+    <p class="disclaimer">Este cuestionario y las brechas expresadas en pesos son herramientas educativas y de orientación. Las cantidades son estimaciones ilustrativas basadas en los datos y supuestos mostrados; no constituyen una evaluación actuarial, financiera, médica o legal, ni una cotización o recomendación de suma asegurada. No garantizan que una persona vaya a sufrir una pérdida económica. Las necesidades reales deben analizarse individualmente con un profesional.</p>
+    <button class="btn-secondary" onclick="restart()">Realizar nuevamente</button>
+  </div>
+</section>
+</main>
+
+<footer>Respaldo Patrimonial · Diagnóstico de Vulnerabilidad Financiera</footer>
+
+<script>
+const questions = [
+{cat:"vida", text:"Si fallecieras mañana, ¿durante cuánto tiempo podría tu familia mantener sus gastos habituales sin depender de tus ingresos?", opts:[
+["Más de 24 meses",0],["12 a 24 meses",2],["6 a 12 meses",4],["3 a 6 meses",7],["Menos de 3 meses o no podría",10]]},
+{cat:"vida", text:"¿Tienes actualmente un seguro de vida que genere un capital para tus beneficiarios?", opts:[
+["Sí, y considero que cubre adecuadamente mis necesidades",0],["Sí, pero no sé si la suma es suficiente",3],["Sí, pero la suma es pequeña frente a mis ingresos/deudas",6],["No tengo actualmente",10],["No estoy seguro de qué cobertura tengo",8]]},
+{cat:"vida", text:"Si tu ingreso principal desapareciera por fallecimiento o invalidez, ¿qué porcentaje de tus gastos familiares podría cubrirse con otros ingresos?", opts:[
+["Más del 100%",0],["75%–100%",2],["50%–74%",4],["25%–49%",7],["Menos del 25%",10]]},
+{cat:"vida", text:"¿Tienes deudas que tu familia tendría que enfrentar si tú fallecieras?", opts:[
+["No tengo deudas relevantes",0],["Sí, pero son menores y están cubiertas con otros recursos",2],["Sí, moderadas",5],["Sí, importantes (hipoteca, negocio, créditos, etc.)",8],["Sí, y no sé cómo podrían pagarse",10]]},
+{cat:"vida", text:"¿Has calculado cuánto capital necesitaría tu familia para conservar su nivel de vida si tú ya no pudieras generar ingresos?", opts:[
+["Sí, y tengo una estrategia para cubrirlo",0],["Tengo una estimación aproximada",3],["Lo he pensado pero no lo he calculado",6],["No lo he calculado",9],["Nunca me lo había planteado",10]]},
+
+{cat:"salud", text:"Si tuvieras que pagar de tu bolsillo una hospitalización importante, ¿cuántos meses de ingresos podrías destinar a ello sin descapitalizarte?", opts:[
+["Más de 12 meses",0],["6–12 meses",2],["3–6 meses",4],["1–3 meses",7],["Menos de 1 mes",10]]},
+{cat:"salud", text:"¿Cuentas con un seguro de gastos médicos mayores o una cobertura privada equivalente?", opts:[
+["Sí, con cobertura que conozco y reviso periódicamente",0],["Sí, pero no conozco bien sus condiciones",3],["Sí, pero tiene una cobertura limitada para mis necesidades",6],["No tengo",10],["No estoy seguro",8]]},
+{cat:"salud", text:"¿Tienes dinero específicamente reservado para deducible, coaseguro y gastos no cubiertos por una póliza médica?", opts:[
+["Sí, está reservado y es suficiente",0],["Sí, pero podría ser insuficiente",3],["Tengo ahorro general, no específico",5],["Muy poco",8],["No tengo",10]]},
+{cat:"salud", text:"¿Qué impacto tendría en tus finanzas una incapacidad para trabajar durante 3 a 6 meses por enfermedad o accidente?", opts:[
+["Prácticamente ninguno",0],["Tendría que reducir algunos gastos",3],["Tendría que usar una parte importante de mis ahorros",5],["Tendría que endeudarme",8],["No podría sostener mis gastos básicos",10]]},
+{cat:"salud", text:"¿Con qué frecuencia revisas si tu protección médica sigue siendo suficiente para tu edad, ingresos y responsabilidades familiares?", opts:[
+["Al menos una vez al año",0],["Cada 2–3 años",2],["Sólo cuando ocurre algo",6],["Nunca la he revisado",9],["No tengo protección médica que revisar",10]]},
+
+{cat:"retiro", text:"¿Qué porcentaje de tu ingreso actual estás destinando de forma constante a construir tu retiro?", opts:[
+["20% o más",0],["10%–19%",2],["5%–9%",4],["1%–4%",7],["Nada actualmente",10]]},
+{cat:"retiro", text:"¿Tienes una estrategia de retiro que indique cuánto capital necesitas acumular para conservar tu nivel de vida?", opts:[
+["Sí, con cálculo y seguimiento",0],["Sí, pero es una estimación",3],["Tengo algún ahorro, pero sin objetivo",5],["Dependo principalmente de la pensión pública",8],["No tengo estrategia",10]]},
+{cat:"retiro", text:"Si dejaras de trabajar hoy, ¿cuánto tiempo podrías mantener tus gastos con tus ahorros e inversiones?", opts:[
+["Más de 5 años",0],["3–5 años",2],["1–3 años",5],["6–12 meses",8],["Menos de 6 meses",10]]},
+{cat:"retiro", text:"¿Sabes aproximadamente cuánto ingreso mensual necesitarías durante tu retiro?", opts:[
+["Sí, y tengo un objetivo definido",0],["Tengo una aproximación",3],["No lo he calculado con detalle",6],["Nunca lo he calculado",9],["No sé cómo calcularlo",10]]},
+{cat:"retiro", text:"¿Tu ahorro para el retiro está diversificado entre más de una estrategia o instrumento?", opts:[
+["Sí, y conozco el propósito de cada uno",0],["Sí, pero no he revisado la diversificación",3],["Tengo principalmente un instrumento",6],["Sólo ahorro de forma ocasional",8],["No tengo ahorro específico para retiro",10]]},
+
+{cat:"educacion", text:"Si tienes hijos o personas dependientes, ¿tienes un fondo destinado específicamente a su educación futura?", opts:[
+["Sí, con un objetivo y plazo definidos",0],["Sí, pero sin una meta clara",3],["Tengo ahorro general que podría utilizar",5],["Ahorro ocasionalmente",8],["No tengo",10]]},
+{cat:"educacion", text:"¿Has estimado cuánto podría costar la educación que deseas proporcionar a tus hijos cuando lleguen a universidad?", opts:[
+["Sí, considerando inflación y plazo",0],["Tengo una estimación",3],["Tengo una idea general",5],["No lo he calculado",9],["No tengo hijos/dependientes",0]]},
+{cat:"educacion", text:"Si tus ingresos disminuyeran considerablemente, ¿tu plan de educación para tus hijos podría continuar sin endeudarte?", opts:[
+["Sí, está fondeado o protegido",0],["Probablemente sí",2],["Tendría que reducir el objetivo",5],["Tendría que endeudarme",8],["Tendría que suspenderlo",10]]},
+{cat:"educacion", text:"¿El ahorro para educación está separado del dinero que utilizas para emergencias y gastos cotidianos?", opts:[
+["Sí, completamente separado",0],["En buena medida",2],["Parcialmente",5],["No, es el mismo fondo",8],["No tengo ahorro educativo",10]]},
+{cat:"educacion", text:"Si tienes hijos, ¿qué tan preparado estás para cubrir educación si tú faltaras antes de que terminaran sus estudios?", opts:[
+["Tengo una estrategia específica",0],["Tengo algunos recursos",3],["Dependería principalmente de otros familiares",6],["No tengo recursos definidos",9],["No lo había considerado",10]]},
+
+{cat:"patrimonio", text:"¿Qué porcentaje de tu patrimonio está concentrado en un solo bien o fuente de valor?", opts:[
+["Menos del 25%",0],["25%–50%",2],["51%–70%",4],["71%–90%",7],["Más del 90% o no tengo claridad",10]]},
+{cat:"patrimonio", text:"¿Tus principales bienes (auto, casa, negocio, equipo, etc.) cuentan con protección adecuada para los riesgos que enfrentan?", opts:[
+["Sí, y reviso las coberturas",0],["Sí, pero hace tiempo no las reviso",3],["Algunos sí y otros no",5],["La mayoría no",8],["No tengo protección",10]]},
+{cat:"patrimonio", text:"Si tu principal vehículo, herramienta de trabajo o activo productivo sufriera un siniestro, ¿podrías reemplazarlo sin endeudarte fuertemente?", opts:[
+["Sí, sin afectar mi estabilidad",0],["Sí, con un impacto moderado",2],["Necesitaría usar gran parte de mis ahorros",5],["Necesitaría financiamiento importante",8],["No podría reemplazarlo",10]]},
+{cat:"patrimonio", text:"¿Tienes un fondo de emergencia separado del dinero destinado a inversión, retiro o educación?", opts:[
+["Sí, cubre más de 6 meses",0],["Sí, cubre 3–6 meses",2],["Sí, cubre 1–3 meses",5],["Menos de 1 mes",8],["No tengo",10]]},
+{cat:"patrimonio", text:"¿Tienes identificados los riesgos que podrían generar una pérdida patrimonial importante (accidente, responsabilidad civil, daños a bienes, interrupción de negocio, etc.)?", opts:[
+["Sí, y tengo medidas para mitigarlos",0],["Conozco algunos",3],["Sólo tengo protegidos los riesgos obligatorios",5],["No los tengo identificados",8],["Nunca los he analizado",10]]}
+];
+
+const areas = {
+vida:{name:"Protección familiar e ingresos", icon:"❤️", max:50,
+ title:"Protección familiar e ingresos",
+ text:"Tu resultado muestra una exposición elevada en la capacidad de tu familia para mantener su estabilidad si ocurre un fallecimiento, invalidez o pérdida prolongada de ingresos. Conviene cuantificar la brecha entre las necesidades de tu familia y los recursos disponibles.",
+ action:"Revisar necesidades de protección familiar, sustitución de ingresos, deudas y capital necesario para mantener el nivel de vida."},
+salud:{name:"Salud y gastos médicos", icon:"🏥", max:50,
+ title:"Salud y gastos médicos",
+ text:"Tu resultado muestra una exposición elevada ante el impacto económico que podría producir una enfermedad, accidente u hospitalización. Una emergencia médica puede afectar no sólo el ahorro, sino también otros objetivos patrimoniales.",
+ action:"Revisar cobertura médica, deducible, coaseguro, red hospitalaria, exclusiones y fondo para gastos no cubiertos."},
+retiro:{name:"Retiro y pensión", icon:"👴", max:50,
+ title:"Retiro y pensión",
+ text:"Tu resultado muestra una posible brecha entre tu capacidad actual de ahorro y los recursos que necesitarías para mantener tu nivel de vida durante el retiro. El tiempo y la constancia son factores importantes al construir una estrategia.",
+ action:"Calcular capital objetivo, ingreso deseado, horizonte, aportación necesaria y alternativas de ahorro/inversión de largo plazo."},
+educacion:{name:"Educación de los hijos", icon:"🎓", max:50,
+ title:"Educación de los hijos",
+ text:"Tu resultado muestra una posible vulnerabilidad en la capacidad de financiar la educación futura de tus hijos sin afectar otros objetivos o recurrir a deuda.",
+ action:"Definir costo objetivo, plazo, inflación estimada, aportación periódica y mecanismo para proteger el objetivo ante fallecimiento o incapacidad."},
+patrimonio:{name:"Patrimonio y activos", icon:"🏠", max:50,
+ title:"Patrimonio y activos",
+ text:"Tu resultado muestra una posible exposición de tus bienes, fondo de emergencia o activos productivos ante eventos que podrían obligarte a descapitalizarte o endeudarte.",
+ action:"Revisar seguros de bienes, responsabilidad civil, activos productivos y fondo de emergencia, según tu situación."}
+};
+
+let current=0, answers=Array(questions.length).fill(null), started=false;
+
+function startTest(){
+  const name=document.getElementById("name").value.trim();
+  const age=document.getElementById("age").value;
+  if(!name || !age){document.getElementById("introError").classList.remove("hidden");return;}
+  document.getElementById("introError").classList.add("hidden");
+  started=true; current=0;
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  renderQuestion();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderQuestion(){
+  const q=questions[current];
+  document.getElementById("counter").textContent=`Pregunta ${current+1} de ${questions.length}`;
+  const p=Math.round(((current+1)/questions.length)*100);
+  document.getElementById("pct").textContent=`${p}%`;
+  document.getElementById("bar").style.width=p+"%";
+  document.getElementById("prevBtn").style.visibility=current===0?"hidden":"visible";
+  document.getElementById("nextBtn").textContent=current===questions.length-1?"Ver mi diagnóstico":"Siguiente";
+  document.getElementById("qError").classList.add("hidden");
+  let html=`<div style="font-size:13px;color:var(--red);font-weight:800;text-transform:uppercase;margin-bottom:7px">${areas[q.cat].name}</div><h2>${q.text}</h2>`;
+  q.opts.forEach((o,i)=>{
+    const checked=answers[current]===i?"checked":"";
+    html+=`<label class="option"><input type="radio" name="answer" value="${i}" ${checked}><span>${o[0]}<small>Impacto: ${o[1]} puntos</small></span></label>`;
+  });
+  document.getElementById("questionBox").innerHTML=html;
+}
+function saveAnswer(){
+  const selected=document.querySelector('input[name="answer"]:checked');
+  if(!selected){document.getElementById("qError").classList.remove("hidden");return false;}
+  answers[current]=Number(selected.value); return true;
+}
+function nextQuestion(){
+  if(!saveAnswer()) return;
+  if(current<questions.length-1){current++;renderQuestion();window.scrollTo({top:0,behavior:"smooth"});}
+  else showResults();
+}
+function prevQuestion(){
+  if(current>0){current--;renderQuestion();window.scrollTo({top:0,behavior:"smooth"});}
+}
+function getScores(){
+  const scores={vida:0,salud:0,retiro:0,educacion:0,patrimonio:0};
+  questions.forEach((q,i)=>{if(answers[i]!==null)scores[q.cat]+=q.opts[answers[i]][1]});
+  return scores;
+}
+function level(score){
+  if(score>=31)return ["ALTO","level-alto"];
+  if(score>=16)return ["MEDIO","level-medio"];
+  return ["BAJO","level-bajo"];
+}
+function money(n){
+  return new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN",maximumFractionDigits:0}).format(Math.max(0,n));
+}
+function selectedValue(id){
+  return Number(document.getElementById(id).value || 0);
+}
+function estimateGap(area, score){
+  const income=selectedValue("income");
+  const savings=selectedValue("savings");
+  const life=selectedValue("lifeCoverage");
+  const retirement=selectedValue("retirementSavings");
+  const dependents=selectedValue("dependents");
+  let gap=0, text="", basis="";
+
+  if(area==="vida"){
+    const annual=Math.max(income,20000)*12;
+    const years=dependents>0 ? 7 : 5;
+    const target=annual*years;
+    gap=Math.max(0,target-life-savings);
+    basis=`Referencia ilustrativa: ${years} años de ingreso anual, menos la protección de vida y el ahorro líquido que indicaste.`;
+    text=`Para este diagnóstico, la brecha estimada es la diferencia entre un capital de referencia de ${money(target)} y los recursos que reportaste (${money(life)} de seguro de vida + ${money(savings)} de ahorro). No representa la suma asegurada recomendada; debe calcularse individualmente.`;
+  }else if(area==="salud"){
+    const monthly=Math.max(income,20000);
+    const reserveTarget=monthly*6;
+    gap=Math.max(0,reserveTarget-savings);
+    basis="Referencia ilustrativa: una reserva equivalente a 6 meses de ingreso frente al ahorro líquido indicado.";
+    text=`La estimación toma como referencia una reserva de 6 meses de ingreso (${money(reserveTarget)}) y resta tu ahorro líquido reportado. Una cobertura médica real debe considerar suma asegurada, deducible, coaseguro, exclusiones y otros gastos.`;
+  }else if(area==="retiro"){
+    const monthly=Math.max(income,20000);
+    const retirementTarget=monthly*12*20*0.70;
+    gap=Math.max(0,retirementTarget-retirement);
+    basis="Referencia ilustrativa: 70% del ingreso actual durante 20 años de retiro, menos el ahorro específico para retiro que reportaste.";
+    text=`La estimación utiliza un supuesto simplificado de 70% del ingreso actual durante 20 años. No sustituye una proyección de retiro que considere edad, inflación, rendimiento, aportaciones, impuestos y esperanza de vida.`;
+  }else if(area==="educacion"){
+    const kids=Math.max(dependents,1);
+    const targetPerChild=1200000;
+    const target=kids*targetPerChild;
+    gap=Math.max(0,target-savings);
+    basis="Referencia ilustrativa: $1.2 MDP por persona para un objetivo educativo futuro; puede ajustarse a la institución, carrera, ciudad y plazo.";
+    text=`Se utilizó un supuesto de $1.2 MDP por persona como referencia educativa. Si no tienes hijos, esta cifra no debe interpretarse como una necesidad real. El costo futuro puede ser muy distinto según el objetivo y el plazo.`;
+  }else{
+    const target=Math.max(income,20000)*6;
+    gap=Math.max(0,target-savings);
+    basis="Referencia ilustrativa: reserva de 6 meses de ingreso para absorber una pérdida patrimonial o interrupción temporal.";
+    text=`La brecha representa la diferencia entre una reserva de referencia de 6 meses de ingreso y el ahorro líquido que reportaste. El patrimonio requiere además revisar cada activo, su valor y los riesgos específicos que enfrenta.`;
+  }
+  return {gap,text,basis};
+}
+function showResults(){
+  const scores=getScores();
+  const ordered=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);
+  const main=ordered[0], mainScore=scores[main], lv=level(mainScore);
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("results").classList.remove("hidden");
+  const name=document.getElementById("name").value.trim();
+  document.getElementById("resultGreeting").textContent=`${name}, este es tu mapa de vulnerabilidad`;
+  const ml=document.getElementById("mainLevel"); ml.textContent=`RIESGO RELATIVO: ${lv[0]}`; ml.className=`level ${lv[1]}`;
+  document.getElementById("mainTitle").textContent=`Tu principal área de atención es ${areas[main].name}`;
+  document.getElementById("mainText").textContent=areas[main].text;
+  document.getElementById("recommendationText").textContent=areas[main].action;
+
+  const gap=estimateGap(main,mainScore);
+  document.getElementById("gapAmount").textContent=money(gap.gap);
+  document.getElementById("gapText").innerHTML=gap.text+`<br><br><strong>${gap.basis}</strong>`;
+
+  const list=document.getElementById("scoreList");
+  list.innerHTML="";
+  ordered.forEach(k=>{
+    const [l,c]=level(scores[k]);
+    const width=(scores[k]/50)*100;
+    list.innerHTML+=`<div class="score-row"><strong>${areas[k].icon} ${areas[k].name}</strong><div class="meter"><span style="width:${width}%"></span></div><span class="level ${c}" style="text-align:center">${scores[k]}/50</span></div>`;
+  });
+  const detail=`Hola Ricardo, realicé el Diagnóstico de Vulnerabilidad Financiera. Mi principal área de atención fue: ${areas[main].name} (${mainScore}/50). La brecha económica ilustrativa fue de ${money(gap.gap)}. Me gustaría conocer qué opciones tengo para fortalecerla.`;
+  document.getElementById("whatsapp").href="https://wa.me/523131513113?text="+encodeURIComponent(detail);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function restart(){
+  answers=Array(questions.length).fill(null); current=0;
+  document.getElementById("results").classList.add("hidden");
+  document.getElementById("intro").classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
